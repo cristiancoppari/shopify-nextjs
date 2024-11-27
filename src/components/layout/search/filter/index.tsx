@@ -1,4 +1,5 @@
 import { SortFilterItem } from "~/lib/constants";
+import FilterItemDropdown from "~/components/layout/search/filter/dropdown";
 
 import { FilterItem } from "./item";
 
@@ -26,9 +27,10 @@ export default function FilterList({ list, title }: { list: ListItem[]; title?: 
         <ul className="hidden flex-col gap-4 md:block">
           <FilterItemList list={list} />
         </ul>
-        {/* <ul className="md:hidden">
+
+        <ul className="md:hidden">
           <FilterItemDropdown list={list} />
-        </ul> */}
+        </ul>
       </nav>
     </>
   );

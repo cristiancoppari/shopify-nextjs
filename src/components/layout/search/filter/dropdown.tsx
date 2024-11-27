@@ -54,11 +54,7 @@ export default function Dropdown({ list }: { list: ListItem[] }) {
       {openSelect && (
         <div onClick={() => setOpenSelect(false)} className="absolute z-40 w-full rounded-b-md bg-white p-4 shadow-md">
           {list.map((item, i) => {
-            return (
-              <li className="mt-2" key={item.title}>
-                <FilterItem item={item} key={i} />
-              </li>
-            );
+            return <FilterItem item={item} key={i} />;
           })}
         </div>
       )}
