@@ -1,22 +1,12 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
-    "react-hooks/exhaustive-deps": 0,
     "@next/next/no-img-element": "off",
     "@next/next/next-script-for-ga": "off",
     "import/order": [
       "warn",
       {
-        "groups": [
-          "type",
-          "builtin",
-          "object",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index"
-        ],
+        "groups": ["type", "builtin", "object", "external", "internal", "parent", "sibling", "index"],
         "pathGroups": [
           {
             "pattern": "~/**",
