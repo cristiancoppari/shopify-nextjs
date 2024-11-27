@@ -1,10 +1,17 @@
-import type { Menu, ShopifyMenuOperation } from "./types";
-
-import { SHOPIFY_GRAQPHQL_API_ENDPOINT, TAGS } from "~/lib/constants";
+import type {
+  Connection,
+  Menu,
+  Image,
+  Product,
+  ShopifyMenuOperation,
+  ShopifyProduct,
+  ShopifyProductsOperation,
+} from "~/lib/shopify/types";
+import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAQPHQL_API_ENDPOINT, TAGS } from "~/lib/constants";
 import { getMenuQuery } from "~/lib/shopify/queries/menu";
-
-import { ensureStartsWith } from "../utils";
-import { isShopifyError } from "../type-guards";
+import { ensureStartsWith } from "~/lib/utils";
+import { isShopifyError } from "~/lib/type-guards";
+import { getProductsQuery } from "~/lib/shopify/queries/products";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://") : "";
 const endpoint = `${domain}${SHOPIFY_GRAQPHQL_API_ENDPOINT}`;
@@ -80,6 +87,51 @@ export async function shopifyFetch<T>({
   }
 }
 
+function reshapeImages(images: Connection<Image>, productTitle: string) {
+  const flattened = removeEdgesAndNodes(images);
+
+  return flattened.map((image) => {
+    const filename = image.url.match(/.*\/(.*)\..*/)?.[1];
+
+    return {
+      ...image,
+      altText: image.altText || `${productTitle} - ${filename}`,
+    };
+  });
+}
+
+export function removeEdgesAndNodes<T>(array: Connection<T>): T[] {
+  return array.edges.map((edge) => edge?.node);
+}
+
+function reshapeProduct(product: ShopifyProduct, filterHiddenProducts: boolean = true) {
+  if (!product || (filterHiddenProducts && product.tags.includes(HIDDEN_PRODUCT_TAG))) return;
+
+  const { images, variants, ...rest } = product;
+
+  return {
+    ...rest,
+    images: reshapeImages(images, product.title),
+    variants: removeEdgesAndNodes(variants),
+  };
+}
+
+export function reshapeProducts(products: ShopifyProduct[]) {
+  const reshapedProducts = [];
+
+  for (const product of products) {
+    if (product) {
+      const reshapedProduct = reshapeProduct(product);
+
+      if (reshapedProduct) {
+        reshapedProducts.push(reshapedProduct);
+      }
+    }
+  }
+
+  return reshapedProducts;
+}
+
 export async function getMenu(handle: string): Promise<Menu[]> {
   const response = await shopifyFetch<ShopifyMenuOperation>({
     query: getMenuQuery,
@@ -97,4 +149,26 @@ export async function getMenu(handle: string): Promise<Menu[]> {
       };
     }) || []
   );
+}
+
+export async function getProducts({
+  sortKey,
+  reverse,
+  query,
+}: {
+  sortKey: string;
+  reverse?: boolean;
+  query: string;
+}): Promise<Product[]> {
+  const res = await shopifyFetch<ShopifyProductsOperation>({
+    query: getProductsQuery,
+    tags: [TAGS.products],
+    variables: {
+      sortKey,
+      reverse,
+      query,
+    },
+  });
+
+  return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
 }

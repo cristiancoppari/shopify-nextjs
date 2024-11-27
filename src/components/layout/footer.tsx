@@ -4,7 +4,7 @@ import { getMenu } from "~/lib/shopify";
 
 export default async function Footer() {
   const menu = await getMenu("nextjs-footer-menu");
-  console.log({ menu });
+
   return (
     <footer className="bg-gray-900">
       <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">

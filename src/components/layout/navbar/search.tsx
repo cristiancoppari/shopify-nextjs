@@ -1,9 +1,11 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
+import { Search as IconSearch } from "lucide-react";
 
 import { Input } from "~/components/ui/input";
 import { createUrl } from "~/lib/utils";
+import { Button } from "~/components/ui/button";
 
 export default function Search() {
   const router = useRouter();
@@ -26,7 +28,7 @@ export default function Search() {
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="flex items-center gap-2">
       <Input
         name="search"
         key={searchParams?.get("q")}
@@ -34,7 +36,9 @@ export default function Search() {
         autoComplete="off"
         defaultValue={searchParams?.get("q") || ""}
       />
-      <button type="submit">Search</button>
+      <Button type="submit">
+        <IconSearch />
+      </Button>
     </form>
   );
 }
