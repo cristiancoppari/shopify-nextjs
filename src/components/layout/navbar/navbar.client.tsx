@@ -10,6 +10,7 @@ import {
   navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu";
 import { Menu } from "~/lib/shopify/types";
+import Search from "~/components/layout/navbar/search";
 
 export function NavbarClient({ items }: { items: Menu[] }) {
   return (
@@ -22,6 +23,10 @@ export function NavbarClient({ items }: { items: Menu[] }) {
             </Link>
           </NavigationMenuItem>
         ))}
+
+        <NavigationMenuItem>
+          <Search />
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
