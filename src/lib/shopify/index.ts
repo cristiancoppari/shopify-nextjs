@@ -6,12 +6,16 @@ import type {
   ShopifyMenuOperation,
   ShopifyProduct,
   ShopifyProductsOperation,
+  Collection,
+  ShopifyCollectionsOperation,
+  ShopifyCollection,
 } from "~/lib/shopify/types";
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAQPHQL_API_ENDPOINT, TAGS } from "~/lib/constants";
 import { getMenuQuery } from "~/lib/shopify/queries/menu";
 import { ensureStartsWith } from "~/lib/utils";
 import { isShopifyError } from "~/lib/type-guards";
 import { getProductsQuery } from "~/lib/shopify/queries/products";
+import { getCollectionsQuery } from "./queries/collections";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://") : "";
 const endpoint = `${domain}${SHOPIFY_GRAQPHQL_API_ENDPOINT}`;
@@ -171,4 +175,56 @@ export async function getProducts({
   });
 
   return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
+}
+
+function reshapeCollection(collection: ShopifyCollection): Collection | undefined {
+  if (!collection) return;
+
+  return {
+    ...collection,
+    path: `/collections/${collection.handle}`,
+  };
+}
+
+function reshapeCollections(collections: ShopifyCollection[]) {
+  const reshapedCollections = [];
+
+  for (const collection of collections) {
+    if (collection) {
+      const reshapedCollection = reshapeCollection(collection);
+
+      if (reshapedCollection) {
+        reshapedCollections.push(reshapedCollection);
+      }
+    }
+  }
+
+  return reshapedCollections;
+}
+
+export async function getCollections(): Promise<Collection[]> {
+  const res = await shopifyFetch<ShopifyCollectionsOperation>({
+    query: getCollectionsQuery,
+    tags: [TAGS.collections],
+  });
+
+  const shopifyCollections = removeEdgesAndNodes(res.body.data.collections);
+
+  const collections = [
+    {
+      handle: "",
+      title: "All",
+      description: "All products",
+      seo: {
+        title: "All products",
+        description: "All products",
+      },
+      updatedAt: new Date().toISOString(),
+      path: "/collections",
+    },
+    // Filter out hidden products
+    ...reshapeCollections(shopifyCollections.filter((collection) => !collection.handle.startsWith("hidden"))),
+  ];
+
+  return collections;
 }
