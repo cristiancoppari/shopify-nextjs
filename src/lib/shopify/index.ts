@@ -9,13 +9,15 @@ import type {
   Collection,
   ShopifyCollectionsOperation,
   ShopifyCollection,
+  ShopifyCollectionProductsOperation,
 } from "~/lib/shopify/types";
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAQPHQL_API_ENDPOINT, TAGS } from "~/lib/constants";
 import { getMenuQuery } from "~/lib/shopify/queries/menu";
 import { ensureStartsWith } from "~/lib/utils";
 import { isShopifyError } from "~/lib/type-guards";
 import { getProductsQuery } from "~/lib/shopify/queries/products";
-import { getCollectionsQuery } from "./queries/collections";
+
+import { getCollectionsQuery, getCollectionsProductsQuery } from "./queries/collections";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://") : "";
 const endpoint = `${domain}${SHOPIFY_GRAQPHQL_API_ENDPOINT}`;
@@ -182,7 +184,7 @@ function reshapeCollection(collection: ShopifyCollection): Collection | undefine
 
   return {
     ...collection,
-    path: `/collections/${collection.handle}`,
+    path: `/search/${collection.handle}`,
   };
 }
 
@@ -220,11 +222,38 @@ export async function getCollections(): Promise<Collection[]> {
         description: "All products",
       },
       updatedAt: new Date().toISOString(),
-      path: "/collections",
+      path: "/search",
     },
     // Filter out hidden products
     ...reshapeCollections(shopifyCollections.filter((collection) => !collection.handle.startsWith("hidden"))),
   ];
 
   return collections;
+}
+
+export async function getCollectionProducts({
+  collection,
+  sortKey,
+  reverse,
+}: {
+  collection: string;
+  sortKey: string;
+  reverse?: boolean;
+}): Promise<Product[]> {
+  const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
+    query: getCollectionsProductsQuery,
+    tags: [TAGS.products, TAGS.collections],
+    variables: {
+      handle: collection,
+      reverse,
+      sortKey: sortKey === "CREATED_AT" ? "CREATED" : sortKey,
+    },
+  });
+
+  if (!res.body.data.collection) {
+    console.log("collection not found");
+    return [];
+  }
+
+  return reshapeProducts(removeEdgesAndNodes(res.body.data.collection.products));
 }

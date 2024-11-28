@@ -113,3 +113,16 @@ export type ShopifyCollectionsOperation = {
     collections: Connection<ShopifyCollection>;
   };
 };
+
+export type ShopifyCollectionProductsOperation = {
+  data: {
+    collection: {
+      products: Connection<ShopifyProduct>;
+    };
+  };
+  variables: {
+    handle: string;
+    reverse?: boolean;
+    sortKey?: string;
+  };
+};
