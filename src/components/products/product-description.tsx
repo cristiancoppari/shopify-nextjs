@@ -2,6 +2,8 @@ import type { Product } from "~/lib/shopify/types";
 import Price from "~/components/ui/price";
 import Prose from "~/components/prose";
 
+import AddToCart from "../cart/add-to-cart";
+
 import VariantSelector from "./variant-selector";
 
 export default function ProductDescription({ product }: { product: Product }) {
@@ -22,7 +24,7 @@ export default function ProductDescription({ product }: { product: Product }) {
 
       {product.descriptionHtml && <Prose className="leading-light mb-6 text-sm" html={product.descriptionHtml} />}
 
-      {/* <AddToCart product={product} /> */}
+      <AddToCart product={product} />
     </>
   );
 }

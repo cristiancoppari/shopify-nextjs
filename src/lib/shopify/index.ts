@@ -11,14 +11,21 @@ import type {
   ShopifyCollection,
   ShopifyCollectionProductsOperation,
   ShopifyProductOperation,
+  Cart,
+  ShopifyAddToCartOperation,
+  ShopifyCart,
+  ShopifyProductRecommendationsOperation,
+  ShopifyCartOperation,
 } from "~/lib/shopify/types";
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAQPHQL_API_ENDPOINT, TAGS } from "~/lib/constants";
-import { getMenuQuery } from "~/lib/shopify/queries/menu";
 import { ensureStartsWith } from "~/lib/utils";
 import { isShopifyError } from "~/lib/type-guards";
-import { getProductQuery, getProductsQuery } from "~/lib/shopify/queries/products";
+import { getMenuQuery } from "~/lib/shopify/queries/menu";
+import { getProductQuery, getProductRecommendationsQuery, getProductsQuery } from "~/lib/shopify/queries/products";
+import { getCartQuery } from "~/lib/shopify/queries/cart";
 
 import { getCollectionsQuery, getCollectionsProductsQuery } from "./queries/collections";
+import { addToCartMutation } from "./mutations/cart-mutations";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://") : "";
 const endpoint = `${domain}${SHOPIFY_GRAQPHQL_API_ENDPOINT}`;
@@ -123,6 +130,45 @@ function reshapeProduct(product: ShopifyProduct, filterHiddenProducts: boolean =
   };
 }
 
+function reshapeCollection(collection: ShopifyCollection): Collection | undefined {
+  if (!collection) return;
+
+  return {
+    ...collection,
+    path: `/search/${collection.handle}`,
+  };
+}
+
+function reshapeCollections(collections: ShopifyCollection[]) {
+  const reshapedCollections = [];
+
+  for (const collection of collections) {
+    if (collection) {
+      const reshapedCollection = reshapeCollection(collection);
+
+      if (reshapedCollection) {
+        reshapedCollections.push(reshapedCollection);
+      }
+    }
+  }
+
+  return reshapedCollections;
+}
+
+function reshapeCart(cart: ShopifyCart): Cart {
+  if (!cart.cost.totalTaxAmount) {
+    cart.cost.totalTaxAmount = {
+      amount: "0.00",
+      currencyCode: "ARS",
+    };
+  }
+
+  return {
+    ...cart,
+    lines: removeEdgesAndNodes(cart.lines),
+  };
+}
+
 export function reshapeProducts(products: ShopifyProduct[]) {
   const reshapedProducts = [];
 
@@ -158,6 +204,18 @@ export async function getMenu(handle: string): Promise<Menu[]> {
   );
 }
 
+export async function getProduct(handle: string): Promise<Product | undefined> {
+  const res = await shopifyFetch<ShopifyProductOperation>({
+    query: getProductQuery,
+    tags: [TAGS.products],
+    variables: {
+      handle,
+    },
+  });
+
+  return reshapeProduct(res.body.data.product, false);
+}
+
 export async function getProducts({
   sortKey,
   reverse,
@@ -180,29 +238,16 @@ export async function getProducts({
   return reshapeProducts(removeEdgesAndNodes(res.body.data.products));
 }
 
-function reshapeCollection(collection: ShopifyCollection): Collection | undefined {
-  if (!collection) return;
+export async function getProductRecommendations(productId: string): Promise<Product[]> {
+  const res = await shopifyFetch<ShopifyProductRecommendationsOperation>({
+    query: getProductRecommendationsQuery,
+    tags: [TAGS.products],
+    variables: {
+      productId,
+    },
+  });
 
-  return {
-    ...collection,
-    path: `/search/${collection.handle}`,
-  };
-}
-
-function reshapeCollections(collections: ShopifyCollection[]) {
-  const reshapedCollections = [];
-
-  for (const collection of collections) {
-    if (collection) {
-      const reshapedCollection = reshapeCollection(collection);
-
-      if (reshapedCollection) {
-        reshapedCollections.push(reshapedCollection);
-      }
-    }
-  }
-
-  return reshapedCollections;
+  return reshapeProducts(res.body.data.productRecommendations);
 }
 
 export async function getCollections(): Promise<Collection[]> {
@@ -259,14 +304,40 @@ export async function getCollectionProducts({
   return reshapeProducts(removeEdgesAndNodes(res.body.data.collection.products));
 }
 
-export async function getProduct(handle: string): Promise<Product | undefined> {
-  const res = await shopifyFetch<ShopifyProductOperation>({
-    query: getProductQuery,
-    tags: [TAGS.products],
+export async function addToCart(
+  cartId: string,
+  lines: {
+    merchandiseId: string;
+    quantity: number;
+  }[],
+): Promise<Cart> {
+  const res = await shopifyFetch<ShopifyAddToCartOperation>({
+    query: addToCartMutation,
     variables: {
-      handle,
+      cartId,
+      lines,
+    },
+    cache: "no-cache",
+  });
+
+  return reshapeCart(res.body.data.cartLinesAdd.cart);
+}
+
+export async function getCart(cartId: string): Promise<Cart | undefined> {
+  if (!cartId) return;
+
+  const res = await shopifyFetch<ShopifyCartOperation>({
+    query: getCartQuery,
+    tags: [TAGS.cart],
+    variables: {
+      cartId,
     },
   });
 
-  return reshapeProduct(res.body.data.product, false);
+  // old carts becomes 'null' when you checkout
+  if (!res.body.data.cart) {
+    return undefined;
+  }
+
+  return reshapeCart(res.body.data.cart);
 }

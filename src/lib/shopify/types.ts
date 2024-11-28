@@ -135,3 +135,76 @@ export type ShopifyProductOperation = {
     handle: string;
   };
 };
+
+export type CartProduct = {
+  id: string;
+  title: string;
+  featuredImage: Image;
+};
+
+export type CartItem = {
+  id: string | undefined;
+  quantity: number;
+  cost: {
+    totalAmount: Money;
+  };
+  merchandise: {
+    id: string;
+    title: string;
+    selectedOptions: Array<{
+      name: string;
+      value: string;
+    }>;
+    product: CartProduct;
+  };
+};
+
+export type ShopifyCart = {
+  id: string | undefined;
+  checkoutUrl: string;
+  cost: {
+    subtotalAmount: Money;
+    totalAmount: Money;
+    totalTaxAmount: Money;
+  };
+  lines: Connection<CartItem>;
+  totalQuantity: number;
+};
+
+export type Cart = Omit<ShopifyCart, "lines"> & {
+  lines: CartItem[];
+};
+
+// https://shopify.dev/docs/api/storefront/2024-10/mutations/cartLinesAdd
+export type ShopifyAddToCartOperation = {
+  data: {
+    cartLinesAdd: {
+      cart: ShopifyCart;
+    };
+  };
+  variables: {
+    cartId: string;
+    lines: Array<{
+      merchandiseId: string;
+      quantity: number;
+    }>;
+  };
+};
+
+export type ShopifyProductRecommendationsOperation = {
+  data: {
+    productRecommendations: Array<ShopifyProduct>;
+  };
+  variables: {
+    productId: string;
+  };
+};
+
+export type ShopifyCartOperation = {
+  data: {
+    cart: ShopifyCart;
+  };
+  variables: {
+    cartId: string;
+  };
+};
