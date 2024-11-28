@@ -126,3 +126,12 @@ export type ShopifyCollectionProductsOperation = {
     sortKey?: string;
   };
 };
+
+export type ShopifyProductOperation = {
+  data: {
+    product: ShopifyProduct;
+  };
+  variables: {
+    handle: string;
+  };
+};

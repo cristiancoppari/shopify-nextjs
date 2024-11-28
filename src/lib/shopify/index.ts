@@ -10,12 +10,13 @@ import type {
   ShopifyCollectionsOperation,
   ShopifyCollection,
   ShopifyCollectionProductsOperation,
+  ShopifyProductOperation,
 } from "~/lib/shopify/types";
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAQPHQL_API_ENDPOINT, TAGS } from "~/lib/constants";
 import { getMenuQuery } from "~/lib/shopify/queries/menu";
 import { ensureStartsWith } from "~/lib/utils";
 import { isShopifyError } from "~/lib/type-guards";
-import { getProductsQuery } from "~/lib/shopify/queries/products";
+import { getProductQuery, getProductsQuery } from "~/lib/shopify/queries/products";
 
 import { getCollectionsQuery, getCollectionsProductsQuery } from "./queries/collections";
 
@@ -256,4 +257,16 @@ export async function getCollectionProducts({
   }
 
   return reshapeProducts(removeEdgesAndNodes(res.body.data.collection.products));
+}
+
+export async function getProduct(handle: string): Promise<Product | undefined> {
+  const res = await shopifyFetch<ShopifyProductOperation>({
+    query: getProductQuery,
+    tags: [TAGS.products],
+    variables: {
+      handle,
+    },
+  });
+
+  return reshapeProduct(res.body.data.product, false);
 }
