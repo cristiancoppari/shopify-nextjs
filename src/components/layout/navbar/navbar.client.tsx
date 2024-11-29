@@ -11,6 +11,7 @@ import {
 } from "~/components/ui/navigation-menu";
 import { Menu } from "~/lib/shopify/types";
 import Search from "~/components/layout/navbar/search";
+import CartModal from "~/components/cart/modal";
 
 export function NavbarClient({ items }: { items: Menu[] }) {
   return (
@@ -26,6 +27,10 @@ export function NavbarClient({ items }: { items: Menu[] }) {
 
         <NavigationMenuItem>
           <Search />
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <CartModal />
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
