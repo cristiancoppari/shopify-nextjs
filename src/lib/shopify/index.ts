@@ -300,7 +300,7 @@ export async function getCollectionProducts({
   });
 
   if (!res.body.data.collection) {
-    console.log("collection not found");
+    console.error("collection not found");
     return [];
   }
 
