@@ -16,6 +16,9 @@ import type {
   ShopifyCart,
   ShopifyProductRecommendationsOperation,
   ShopifyCartOperation,
+  ShopifyCreateCartOperation,
+  ShopifyRemoveFromCartOperation,
+  ShopifyUpdateCartOperation,
 } from "~/lib/shopify/types";
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAQPHQL_API_ENDPOINT, TAGS } from "~/lib/constants";
 import { ensureStartsWith } from "~/lib/utils";
@@ -25,7 +28,7 @@ import { getProductQuery, getProductRecommendationsQuery, getProductsQuery } fro
 import { getCartQuery } from "~/lib/shopify/queries/cart";
 
 import { getCollectionsQuery, getCollectionsProductsQuery } from "./queries/collections";
-import { addToCartMutation } from "./mutations/cart";
+import { addToCartMutation, createCartMutation, editCartItemsMutation, removeFromCartMutation } from "./mutations/cart";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://") : "";
 const endpoint = `${domain}${SHOPIFY_GRAQPHQL_API_ENDPOINT}`;
@@ -340,4 +343,42 @@ export async function getCart(cartId: string): Promise<Cart | undefined> {
   }
 
   return reshapeCart(res.body.data.cart);
+}
+
+export async function createCart(): Promise<Cart> {
+  const res = await shopifyFetch<ShopifyCreateCartOperation>({
+    query: createCartMutation,
+    cache: "no-store",
+  });
+
+  return reshapeCart(res.body.data.cartCreate.cart);
+}
+
+export async function removeFromCart(cartId: string, lineIds: string[]): Promise<Cart> {
+  const res = await shopifyFetch<ShopifyRemoveFromCartOperation>({
+    query: removeFromCartMutation,
+    variables: {
+      cartId,
+      lineIds,
+    },
+    cache: "no-store",
+  });
+
+  return reshapeCart(res.body.data.cartLinesRemove.cart);
+}
+
+export async function updateCart(
+  cartId: string,
+  lines: { id: string; merchandiseId: string; quantity: number }[],
+): Promise<Cart> {
+  const res = await shopifyFetch<ShopifyUpdateCartOperation>({
+    query: editCartItemsMutation,
+    variables: {
+      cartId,
+      lines,
+    },
+    cache: "no-store",
+  });
+
+  return reshapeCart(res.body.data.cartLinesUpdate.cart);
 }
