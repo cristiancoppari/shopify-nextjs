@@ -12,10 +12,10 @@ import { DEFAULT_OPTION } from "~/lib/constants";
 import { createUrl } from "~/lib/utils";
 import Price from "~/components/ui/price";
 import OpenCart from "~/components/cart/open-cart";
-import CloseCart from "~/components/cart/close-cart";
 
 import { createCartAndSetCookie, redirectToCheckout } from "./actions";
 import { EditItemQuantityButton } from "./edit-item-quantity-button";
+import { DeleteItemButton } from "./delete-item-button";
 
 type MerchandiseSearchParams = {
   [key: string]: string;
@@ -43,18 +43,17 @@ export default function CartModal() {
     }
   }, [isOpen, cart?.totalQuantity, quantityRef]);
 
+  console.log({ cart });
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <OpenCart quantity={cart?.totalQuantity} />
       </DialogTrigger>
-      <DialogContent className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl dark:border-neutral-700 dark:bg-black/80 dark:text-white md:w-[390px]">
+      <DialogContent>
         <div className="flex items-center justify-between">
-          <DialogTitle className="text-lg font-semibold">My Cart</DialogTitle>
-          <DialogClose className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100">
-            <CloseCart />
-            <span className="sr-only">Close</span>
-          </DialogClose>
+          <DialogTitle>My Cart</DialogTitle>
+          <DialogClose />
         </div>
         {!cart || cart.lines.length === 0 ? (
           <div>
@@ -80,9 +79,9 @@ export default function CartModal() {
                   );
 
                   return (
-                    <li key={i} className="lex w-full flex-col border-b border-neutral-300 dark:border-neutral-700">
+                    <li key={i} className="flex w-full flex-col border-b border-neutral-300 dark:border-neutral-700">
                       <div className="relative flex w-full flex-row justify-between px-1 py-4">
-                        {/* <DeleteItemButton item={item} optimisticUpdate={updateCartItem} /> */}
+                        <DeleteItemButton item={item} optimisticUpdate={updateCartItem} />
                       </div>
                       <div className="flex flex-row">
                         <div className="relative h-16 w-16 overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800">
