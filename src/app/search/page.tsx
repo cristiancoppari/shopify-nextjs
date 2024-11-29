@@ -5,9 +5,9 @@ import { ProductGrid } from "~/components/products/product-grid";
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     [key: string]: string | string[] | undefined;
-  };
+  }>;
 }) {
   const { sort, q: searchValue } = (await searchParams) as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;

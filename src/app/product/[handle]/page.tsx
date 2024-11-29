@@ -8,8 +8,9 @@ import { getProduct, getProductRecommendations } from "~/lib/shopify";
 import ProductDescription from "~/components/products/product-description";
 import { GridTileImage } from "~/components/grid/grid-tile-image";
 
-export default async function ProductPage({ params }: { params: { handle: string } }) {
-  const parameters = (await params) as { handle: string };
+export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
+  const parameters = await params;
+  console.log(parameters);
   const product = await getProduct(parameters.handle);
 
   if (!product) notFound();
