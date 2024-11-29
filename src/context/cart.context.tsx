@@ -30,9 +30,9 @@ function createEmptyCart(): Cart {
     totalQuantity: 0,
     lines: [],
     cost: {
-      subtotalAmount: { amount: "0", currencyCode: "ARS" },
-      totalAmount: { amount: "0", currencyCode: "ARS" },
-      totalTaxAmount: { amount: "0", currencyCode: "ARS" },
+      subtotalAmount: { amount: "0", currencyCode: "USD" },
+      totalAmount: { amount: "0", currencyCode: "USD" },
+      totalTaxAmount: { amount: "0", currencyCode: "USD" },
     },
   };
 }

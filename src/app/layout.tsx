@@ -34,7 +34,6 @@ export default async function RootLayout({
 }>) {
   const resCookies = await cookies();
   const cartId = resCookies.get("cartId")?.value;
-
   const cart = getCart(cartId!);
 
   return (
