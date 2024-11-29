@@ -4,7 +4,7 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "~/components/ui/button";
-import { useProduct, useUpdateUrl } from "~/context/product-context";
+import { useProduct, useUpdateUrl } from "~/context/product.context";
 
 import { GridTileImage } from "../grid/grid-tile-image";
 

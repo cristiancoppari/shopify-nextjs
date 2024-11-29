@@ -4,10 +4,10 @@ import { useActionState } from "react";
 import { ShoppingCart } from "lucide-react";
 
 import type { Product } from "~/lib/shopify/types";
-import { useProduct } from "~/context/product-context";
+import { useProduct } from "~/context/product.context";
 import { Button } from "~/components/ui/button";
-import useCart from "~/context/cart-context";
-import { addItem } from "~/actions/cart-actions";
+import { useCart } from "~/context/cart.context";
+import { addItem } from "~/components/cart/actions";
 
 function SubmitButton({
   availableForSale,
@@ -46,10 +46,11 @@ export default function AddToCart({ product }: { product: Product }) {
   const variant = variants.find((variant) =>
     variant.selectedOptions.every((option) => option.value === state[option.name.toLowerCase()]),
   );
-  const defaultVariantId = variants.length === 1 ? variants[0].id : undefined;
+  const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
   const selectedVariantId = variant?.id || defaultVariantId;
-  const actionWithVariant = formAction.bind(null, selectedVariantId);
   const finalVariant = variants.find((variant) => variant.id === selectedVariantId);
+
+  const actionWithVariant = formAction.bind(null, selectedVariantId);
 
   if (!finalVariant) {
     return (

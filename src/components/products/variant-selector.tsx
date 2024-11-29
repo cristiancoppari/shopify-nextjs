@@ -1,6 +1,6 @@
 "use client";
 
-import { useProduct, useUpdateUrl } from "~/context/product-context";
+import { useProduct, useUpdateUrl } from "~/context/product.context";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { ProductOption, ProductVariant } from "~/lib/shopify/types";

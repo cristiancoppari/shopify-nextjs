@@ -25,7 +25,7 @@ import { getProductQuery, getProductRecommendationsQuery, getProductsQuery } fro
 import { getCartQuery } from "~/lib/shopify/queries/cart";
 
 import { getCollectionsQuery, getCollectionsProductsQuery } from "./queries/collections";
-import { addToCartMutation } from "./mutations/cart-mutations";
+import { addToCartMutation } from "./mutations/cart";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://") : "";
 const endpoint = `${domain}${SHOPIFY_GRAQPHQL_API_ENDPOINT}`;
@@ -156,9 +156,9 @@ function reshapeCollections(collections: ShopifyCollection[]) {
 }
 
 function reshapeCart(cart: ShopifyCart): Cart {
-  if (!cart.cost.totalTaxAmount) {
+  if (!cart.cost?.totalTaxAmount) {
     cart.cost.totalTaxAmount = {
-      amount: "0.00",
+      amount: "0.0",
       currencyCode: "ARS",
     };
   }

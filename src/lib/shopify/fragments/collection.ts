@@ -1,4 +1,4 @@
-import seoFragment from "~/lib/shopify/fragments/seo";
+import seoFragment from "./seo";
 
 export const collectionFragment = /* GraphQL */ `
   fragment collection on Collection {

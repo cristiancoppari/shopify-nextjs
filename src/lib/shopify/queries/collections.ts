@@ -1,6 +1,6 @@
 import { collectionFragment } from "~/lib/shopify/fragments/collection";
 
-import productFragment from "../fragments/product";
+import { productFragment } from "../fragments/product";
 
 export const getCollectionsQuery = /* GraphQL */ `
   query getCollections {

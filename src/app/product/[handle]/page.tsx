@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-import { ProductProvider } from "~/context/product-context";
+import { ProductProvider } from "~/context/product.context";
 import Gallery from "~/components/products/gallery";
 import { getProduct, getProductRecommendations } from "~/lib/shopify";
 import ProductDescription from "~/components/products/product-description";

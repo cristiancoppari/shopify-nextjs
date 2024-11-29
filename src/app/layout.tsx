@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 import Navbar from "~/components/layout/navbar/navbar";
 import Footer from "~/components/layout/footer";
-import { CartProvider } from "~/context/cart-context";
+import { CartProvider } from "~/context/cart.context";
 import { getCart } from "~/lib/shopify";
 
 import "~/app/globals.css";

@@ -1,8 +1,8 @@
 import imageFragment from "./image";
 import seoFragment from "./seo";
 
-const productFragment = /* GraphQL */ `
-  fragment product on Product {
+export const productFragment = /* GraphQl */ `
+    fragment product on Product {
     id
     handle
     availableForSale
@@ -15,16 +15,16 @@ const productFragment = /* GraphQL */ `
       values
     }
     priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
       maxVariantPrice {
         amount
         currencyCode
       }
+      minVariantPrice {
+        amount
+        currencyCode
+      }
     }
-    variants(first: 100) {
+    variants(first: 250) {
       edges {
         node {
           id
@@ -56,10 +56,7 @@ const productFragment = /* GraphQL */ `
     }
     tags
     updatedAt
-  }
-
-  ${imageFragment}
-  ${seoFragment}
+    }
+    ${imageFragment}
+    ${seoFragment}
 `;
-
-export default productFragment;
