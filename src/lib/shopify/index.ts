@@ -19,6 +19,8 @@ import type {
   ShopifyCreateCartOperation,
   ShopifyRemoveFromCartOperation,
   ShopifyUpdateCartOperation,
+  ShopifyPageOperation,
+  Page,
 } from "~/lib/shopify/types";
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAQPHQL_API_ENDPOINT, TAGS } from "~/lib/constants";
 import { ensureStartsWith } from "~/lib/utils";
@@ -32,6 +34,7 @@ import { addToCartMutation, createCartMutation, editCartItemsMutation, removeFro
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
+import { getPageQuery } from "./queries/page";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://") : "";
 const endpoint = `${domain}${SHOPIFY_GRAQPHQL_API_ENDPOINT}`;
@@ -413,4 +416,17 @@ export async function revalidate(request: NextRequest): Promise<NextResponse> {
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
+}
+
+export async function getPage(handle: string): Promise<Page> {
+  const res = await shopifyFetch<ShopifyPageOperation>({
+    query: getPageQuery,
+    tags: [TAGS.pages],
+    cache: "no-store",
+    variables: {
+      handle,
+    },
+  });
+
+  return res.body.data.pageByHandle;
 }
