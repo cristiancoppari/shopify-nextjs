@@ -1,7 +1,25 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import Prose from "~/components/prose";
 import { getPage } from "~/lib/shopify";
+
+export async function generateMetadata({ params }: { params: Promise<{ page: string }> }): Promise<Metadata> {
+  const paramsStore = await params;
+  const page = await getPage(paramsStore.page);
+
+  if (!page) notFound();
+
+  return {
+    title: page.seo?.title || page.title,
+    description: page.seo?.description || page.bodySummary,
+    openGraph: {
+      title: page.seo?.title || page.title,
+      description: page.seo?.description,
+      type: "article",
+    },
+  };
+}
 
 export default async function Page({ params }: { params: Promise<{ page: string }> }) {
   const paramsStore = await params;

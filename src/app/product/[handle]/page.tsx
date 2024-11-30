@@ -1,12 +1,48 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Metadata } from "next";
 
 import { ProductProvider } from "~/context/product.context";
 import Gallery from "~/components/products/gallery";
 import { getProduct, getProductRecommendations } from "~/lib/shopify";
 import ProductDescription from "~/components/products/product-description";
 import { GridTileImage } from "~/components/grid/grid-tile-image";
+import { HIDDEN_PRODUCT_TAG } from "~/lib/constants";
+
+export async function generateMetadata({ params }: { params: { handle: string } }): Promise<Metadata> {
+  const product = await getProduct(params.handle);
+
+  if (!product) return notFound();
+
+  const { url, width, height, altText: alt } = product.featuredImage || {};
+  const indexable = !product.tags.includes(HIDDEN_PRODUCT_TAG);
+
+  return {
+    title: product.seo.title || product.title,
+    description: product.seo.description || product.description,
+    robots: {
+      index: indexable,
+      follow: indexable,
+      googleBot: {
+        index: indexable,
+        follow: indexable,
+      },
+    },
+    openGraph: url
+      ? {
+          images: [
+            {
+              url,
+              width,
+              height,
+              alt,
+            },
+          ],
+        }
+      : null,
+  };
+}
 
 export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
   const parameters = await params;

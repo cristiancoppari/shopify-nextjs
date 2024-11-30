@@ -2,10 +2,16 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { Search as IconSearch } from "lucide-react";
+import { Metadata } from "next";
 
 import { Input } from "~/components/ui/input";
 import { createUrl } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Search",
+  description: "Search for products",
+};
 
 export default function Search() {
   const router = useRouter();

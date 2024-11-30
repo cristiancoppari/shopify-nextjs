@@ -21,6 +21,7 @@ import type {
   ShopifyUpdateCartOperation,
   ShopifyPageOperation,
   Page,
+  ShopifyPagesOperation,
 } from "~/lib/shopify/types";
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAQPHQL_API_ENDPOINT, TAGS } from "~/lib/constants";
 import { ensureStartsWith } from "~/lib/utils";
@@ -34,7 +35,7 @@ import { addToCartMutation, createCartMutation, editCartItemsMutation, removeFro
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
-import { getPageQuery } from "./queries/page";
+import { getPageQuery, getPagesQuery } from "./queries/page";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://") : "";
 const endpoint = `${domain}${SHOPIFY_GRAQPHQL_API_ENDPOINT}`;
@@ -230,9 +231,9 @@ export async function getProducts({
   reverse,
   query,
 }: {
-  sortKey: string;
+  sortKey?: string;
   reverse?: boolean;
-  query: string;
+  query?: string;
 }): Promise<Product[]> {
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
@@ -421,7 +422,6 @@ export async function revalidate(request: NextRequest): Promise<NextResponse> {
 export async function getPage(handle: string): Promise<Page> {
   const res = await shopifyFetch<ShopifyPageOperation>({
     query: getPageQuery,
-    tags: [TAGS.pages],
     cache: "no-store",
     variables: {
       handle,
@@ -429,4 +429,13 @@ export async function getPage(handle: string): Promise<Page> {
   });
 
   return res.body.data.pageByHandle;
+}
+
+export async function getPages(): Promise<Page[]> {
+  const res = await shopifyFetch<ShopifyPagesOperation>({
+    query: getPagesQuery,
+    cache: "no-store",
+  });
+
+  return removeEdgesAndNodes(res.body.data.pages);
 }
