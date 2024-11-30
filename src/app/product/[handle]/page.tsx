@@ -10,8 +10,9 @@ import ProductDescription from "~/components/products/product-description";
 import { GridTileImage } from "~/components/grid/grid-tile-image";
 import { HIDDEN_PRODUCT_TAG } from "~/lib/constants";
 
-export async function generateMetadata({ params }: { params: { handle: string } }): Promise<Metadata> {
-  const product = await getProduct(params.handle);
+export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
+  const paramsStore = await params;
+  const product = await getProduct(paramsStore.handle);
 
   if (!product) return notFound();
 

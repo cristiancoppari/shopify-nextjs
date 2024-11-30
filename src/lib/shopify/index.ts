@@ -1,3 +1,7 @@
+import { headers } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+
 import type {
   Connection,
   Menu,
@@ -32,9 +36,6 @@ import { getCartQuery } from "~/lib/shopify/queries/cart";
 
 import { getCollectionsQuery, getCollectionsProductsQuery } from "./queries/collections";
 import { addToCartMutation, createCartMutation, editCartItemsMutation, removeFromCartMutation } from "./mutations/cart";
-import { headers } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
 import { getPageQuery, getPagesQuery } from "./queries/page";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN ? ensureStartsWith(process.env.SHOPIFY_STORE_DOMAIN, "https://") : "";

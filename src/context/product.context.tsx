@@ -78,6 +78,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
       updateOption,
       updateImage,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [state],
   );
 
