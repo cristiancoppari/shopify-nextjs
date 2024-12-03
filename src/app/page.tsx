@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
-import Hero from "~/components/custom/hero";
+import { Hero } from "~/components/custom/hero";
+import { Grid } from "~/components/products/grid";
+import { getProducts } from "~/lib/shopify";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -8,14 +10,21 @@ export const metadata: Metadata = {
 };
 
 const HERO = {
-  title: "Subtitle",
+  title: "Title",
   subtitle: "Subtitle",
 };
 
-export default function Home() {
+export default async function Home() {
+  const products = await getProducts({
+    first: 4,
+  });
   return (
-    <div>
+    <main>
       <Hero {...HERO} />
-    </div>
+
+      <div className="container mx-auto px-4 py-8">
+        <Grid items={products} />
+      </div>
+    </main>
   );
 }

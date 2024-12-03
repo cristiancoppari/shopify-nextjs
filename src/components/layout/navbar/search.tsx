@@ -42,7 +42,7 @@ export default function Search() {
         autoComplete="off"
         defaultValue={searchParams?.get("q") || ""}
       />
-      <Button type="submit">
+      <Button type="submit" variant={"ghost"}>
         <IconSearch />
       </Button>
     </form>

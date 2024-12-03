@@ -206,12 +206,30 @@ export async function getMenu(handle: string): Promise<Menu[]> {
   });
 
   return (
-    response.body?.data?.menu?.items.map((item: { title: string; url: string }) => {
-      return {
-        title: item.title,
-        path: item.url.replace(domain, "").replace("/collections", "/search").replace("/pages", "").replace("/all", ""),
-      };
-    }) || []
+    response.body?.data?.menu?.items.map(
+      (item: { title: string; url: string; items?: { title: string; url: string }[] }) => {
+        const subItems = item.items?.length
+          ? item.items.map((subItem: { title: string; url: string }) => ({
+              title: subItem.title,
+              path: subItem.url
+                .replace(domain, "")
+                .replace("/collections", "/search")
+                .replace("/pages", "")
+                .replace("/all", ""),
+            }))
+          : undefined;
+
+        return {
+          title: item.title,
+          path: item.url
+            .replace(domain, "")
+            .replace("/collections", "/search")
+            .replace("/pages", "")
+            .replace("/all", ""),
+          ...(subItems && { items: subItems }),
+        };
+      },
+    ) || []
   );
 }
 
@@ -231,10 +249,12 @@ export async function getProducts({
   sortKey,
   reverse,
   query,
+  first,
 }: {
   sortKey?: string;
   reverse?: boolean;
   query?: string;
+  first?: number;
 }): Promise<Product[]> {
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
@@ -243,6 +263,7 @@ export async function getProducts({
       sortKey,
       reverse,
       query,
+      first,
     },
   });
 

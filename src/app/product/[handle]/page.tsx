@@ -47,7 +47,6 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
 
 export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
   const parameters = await params;
-  console.log(parameters);
   const product = await getProduct(parameters.handle);
 
   if (!product) notFound();

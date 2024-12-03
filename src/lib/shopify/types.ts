@@ -1,6 +1,7 @@
 export type Menu = {
   title: string;
   path: string;
+  items?: Menu[];
 };
 
 export type ShopifyMenuOperation = {
@@ -91,6 +92,7 @@ export type ShopifyProductsOperation = {
     query?: string;
     reverse?: boolean;
     sortKey?: string;
+    first?: number;
   };
 };
 

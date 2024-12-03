@@ -38,8 +38,6 @@ export default function VariantSelector({
     };
   });
 
-  console.log({ options });
-
   return options.map((option) => {
     return (
       <form key={option.id}>

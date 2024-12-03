@@ -8,7 +8,7 @@ const titleVariants = cva("font-bold text-gray-900", {
       h1: "text-4xl md:text-5xl lg:text-6xl",
       h2: "text-3xl md:text-4xl lg:text-5xl",
       h3: "text-2xl md:text-3xl lg:text-4xl",
-      h4: "text-xl md:text-2xl lg:text-3xl",
+      h4: "text-xl md:text-xl lg:text-2xl font-normal",
     },
   },
   defaultVariants: {

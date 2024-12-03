@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { cookies } from "next/headers";
 
-import Navbar from "~/components/layout/navbar/navbar";
+import { Header } from "~/components/layout/header/header";
 import Footer from "~/components/layout/footer";
 import { CartProvider } from "~/context/cart.context";
 import { getCart } from "~/lib/shopify";
@@ -40,7 +40,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <CartProvider cartPromise={cart}>
-          <Navbar />
+          <Header />
           {children}
           <Footer />
         </CartProvider>
