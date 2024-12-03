@@ -12,12 +12,18 @@ import {
   navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu";
 import { Menu } from "~/lib/shopify/types";
+import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
 export function NavbarClient({ items }: { items: Menu[] }) {
   return (
     <NavigationMenu>
       <NavigationMenuList>
+        <NavigationMenuItem>
+          <Link href="/" legacyBehavior passHref prefetch={true}>
+            <NavigationMenuLink className={cn(buttonVariants(), "bg-violet-500")}>Logo</NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
         {items.map((item, i) => (
           <NavigationMenuItem key={i}>
             {item.items ? (

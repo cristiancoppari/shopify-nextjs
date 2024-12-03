@@ -18,6 +18,9 @@ export default async function Home() {
   const products = await getProducts({
     first: 4,
   });
+
+  console.log({ products });
+
   return (
     <main>
       <Hero {...HERO} />

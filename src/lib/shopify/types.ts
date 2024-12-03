@@ -40,6 +40,7 @@ export type Connection<T> = {
 export type ProductVariant = {
   id: string;
   title: string;
+  descritpion?: string;
   availableForSale: boolean;
   selectedOptions: {
     name: string;
