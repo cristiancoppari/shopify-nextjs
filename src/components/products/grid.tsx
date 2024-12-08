@@ -14,16 +14,18 @@ export function Grid({ items, cols = 4 }: { cols?: Cols; items: Product[] | Coll
         cols === 2 && "md:grid-cols-2",
       )}
     >
-      {items.length
-        ? items.map((item) => {
-            // Check if item is a Product by looking for a unique Product property
-            if ("variants" in item) {
-              return <ProductCard key={item.id} {...(item as Product)} />;
-            }
-            // Item is a Collection
-            return <CollectionCard key={item.id} {...(item as Collection)} />;
-          })
-        : "No items found"}
+      {items.length ? (
+        items.map((item, i) => {
+          // Check if item is a Product by looking for a unique Product property
+          if ("variants" in item) {
+            return <ProductCard key={i} {...(item as Product)} />;
+          }
+          // Item is a Collection
+          return <CollectionCard key={i} {...(item as Collection)} />;
+        })
+      ) : (
+        <p>No items found</p>
+      )}
     </div>
   );
 }

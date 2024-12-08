@@ -9,11 +9,16 @@ export function CollectionCard({ title, handle, image, description }: Collection
   if (!image) return null;
 
   return (
-    <Link href={`/collection/${handle}`}>
-      <Card className="overflow-hidden rounded-none border-none shadow-none">
+    <Link href={`/search/${handle}`}>
+      <Card className="overflow-hidden border-none shadow-none">
         <CardContent className="p-0">
-          <div className="relative aspect-square overflow-hidden">
-            <Image src={image.url} alt={title} fill className="object-cover transition-transform hover:scale-105" />
+          <div className="relative aspect-square overflow-hidden rounded-lg">
+            <Image
+              src={image.url}
+              alt={title}
+              fill
+              className="rounded-lg object-cover transition-transform hover:scale-105"
+            />
           </div>
           <div className="pt-2">
             <h3 className="font-medium">{title}</h3>

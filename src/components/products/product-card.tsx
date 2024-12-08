@@ -7,14 +7,14 @@ import { Card, CardContent } from "~/components/ui/card";
 export function ProductCard({ title, handle, featuredImage, priceRange, description }: Product) {
   return (
     <Link href={`/product/${handle}`}>
-      <Card className="overflow-hidden rounded-none border-none shadow-none">
+      <Card className="overflow-hidden border-none shadow-none">
         <CardContent className="p-0">
-          <div className="relative aspect-square overflow-hidden">
+          <div className="relative aspect-square overflow-hidden rounded-lg">
             <Image
               src={featuredImage.url}
               alt={title}
               fill
-              className="object-cover transition-transform hover:scale-105"
+              className="rounded-lg object-cover transition-transform hover:scale-105"
             />
           </div>
           <div className="pt-2">

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMediaQuery } from "usehooks-ts";
 import { MenuIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "~/components/ui/drawer";
 import {
@@ -19,15 +20,22 @@ import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
 export function NavbarClient({ items }: { items: Menu[] }) {
+  const [isMounted, setIsMounted] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   if (!isMobile) {
     return (
       <NavigationMenu>
         <NavigationMenuList>
-          <NavigationMenuItem className="mr-4">
+          <NavigationMenuItem>
             <Link href="/" legacyBehavior passHref prefetch={true}>
-              <NavigationMenuLink className={cn(buttonVariants(), "bg-black")}>Your logo</NavigationMenuLink>
+              <NavigationMenuLink className={cn(buttonVariants(), "bg-black")}>Your Logo</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           {items.map((item, i) => (
@@ -59,42 +67,42 @@ export function NavbarClient({ items }: { items: Menu[] }) {
         </NavigationMenuList>
       </NavigationMenu>
     );
+  } else {
+    return (
+      <Drawer>
+        <DrawerTrigger className={cn(buttonVariants(), "fixed bottom-8 right-4 h-14 w-14 rounded-full")}>
+          <MenuIcon />
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader className="mt-4">
+            <DrawerTitle>Your logo here</DrawerTitle>
+          </DrawerHeader>
+          <ul className="space-y-4 p-8 text-lg">
+            {items.map((item, i) => (
+              <li key={i}>
+                {item.items ? (
+                  <>
+                    <div className="font-medium">{item.title}</div>
+                    <ul className="ml-4 mt-2 space-y-2">
+                      {item.items.map((subItem, j) => (
+                        <li key={j}>
+                          <Link href={subItem.path} prefetch={true}>
+                            {subItem.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <Link href={item.path} prefetch={true}>
+                    {item.title}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </DrawerContent>
+      </Drawer>
+    );
   }
-
-  return (
-    <Drawer>
-      <DrawerTrigger className={cn(buttonVariants(), "fixed bottom-8 right-4 h-14 w-14 rounded-full")}>
-        <MenuIcon />
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="mt-4">
-          <DrawerTitle>Your logo here</DrawerTitle>
-        </DrawerHeader>
-        <ul className="space-y-4 p-8 text-lg">
-          {items.map((item, i) => (
-            <li key={i}>
-              {item.items ? (
-                <>
-                  <div className="font-medium">{item.title}</div>
-                  <ul className="ml-4 mt-2 space-y-2">
-                    {item.items.map((subItem, j) => (
-                      <li key={j}>
-                        <Link href={subItem.path} prefetch={true}>
-                          {subItem.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <Link href={item.path} prefetch={true}>
-                  {item.title}
-                </Link>
-              )}
-            </li>
-          ))}
-        </ul>
-      </DrawerContent>
-    </Drawer>
-  );
 }
