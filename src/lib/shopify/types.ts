@@ -1,6 +1,7 @@
 export type Menu = {
   title: string;
   path: string;
+  resource?: Collection;
   items?: Menu[];
 };
 
@@ -10,6 +11,7 @@ export type ShopifyMenuOperation = {
       items: {
         title: string;
         url: string;
+        resource?: Collection;
       }[];
     };
   };

@@ -9,7 +9,7 @@ export function CollectionCard({ title, handle, image, description }: Collection
   if (!image) return null;
 
   return (
-    <Link href={`/search/${handle}`}>
+    <Link href={`//${handle}`}>
       <Card className="overflow-hidden border-none shadow-none">
         <CardContent className="p-0">
           <div className="relative aspect-square overflow-hidden rounded-lg">
@@ -18,6 +18,7 @@ export function CollectionCard({ title, handle, image, description }: Collection
               alt={title}
               fill
               className="rounded-lg object-cover transition-transform hover:scale-105"
+              sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
             />
           </div>
           <div className="pt-2">

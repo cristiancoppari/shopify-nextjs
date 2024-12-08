@@ -1,3 +1,5 @@
+import { collectionFragment } from "../fragments/collection";
+
 export const getMenuQuery = /* GraphQL */ `
   query getMenu($handle: String!) {
     menu(handle: $handle) {
@@ -7,8 +9,12 @@ export const getMenuQuery = /* GraphQL */ `
         items {
           title
           url
+          resource {
+            ...collection
+          }
         }
       }
     }
   }
+  ${collectionFragment}
 `;

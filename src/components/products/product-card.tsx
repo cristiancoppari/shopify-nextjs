@@ -15,6 +15,7 @@ export function ProductCard({ title, handle, featuredImage, priceRange, descript
               alt={title}
               fill
               className="rounded-lg object-cover transition-transform hover:scale-105"
+              sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
             />
           </div>
           <div className="pt-2">

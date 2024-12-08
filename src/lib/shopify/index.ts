@@ -207,15 +207,16 @@ export async function getMenu(handle: string): Promise<Menu[]> {
 
   return (
     response.body?.data?.menu?.items.map(
-      (item: { title: string; url: string; items?: { title: string; url: string }[] }) => {
+      (item: { title: string; url: string; items?: { title: string; url: string; resource?: Collection }[] }) => {
         const subItems = item.items?.length
-          ? item.items.map((subItem: { title: string; url: string }) => ({
+          ? item.items.map((subItem) => ({
               title: subItem.title,
               path: subItem.url
                 .replace(domain, "")
                 .replace("/collections", "/search")
                 .replace("/pages", "")
                 .replace("/all", ""),
+              resource: subItem.resource,
             }))
           : undefined;
 
@@ -292,6 +293,7 @@ export async function getCollections(): Promise<Collection[]> {
 
   const collections = [
     {
+      id: "all",
       handle: "",
       title: "All",
       description: "All products",

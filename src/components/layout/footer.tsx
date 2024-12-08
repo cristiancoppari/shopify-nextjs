@@ -10,7 +10,7 @@ export default async function Footer() {
   const menu = [...nav, ...footer];
 
   return (
-    <footer className="bg-zinc-900">
+    <footer className="mt-20 bg-zinc-900">
       <div className="mx-auto max-w-7xl overflow-hidden px-6 lg:px-8">
         <nav
           aria-label="Footer"

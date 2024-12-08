@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useMediaQuery } from "usehooks-ts";
 import { MenuIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -39,17 +40,27 @@ export function NavbarClient({ items }: { items: Menu[] }) {
             </Link>
           </NavigationMenuItem>
           {items.map((item, i) => (
-            <NavigationMenuItem key={i}>
+            <NavigationMenuItem key={i} className="relative">
               {item.items ? (
                 <>
                   <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     {item.items.map((subItem, j) => (
-                      <ul key={j} className="grid w-[200px] gap-2 p-2">
-                        <li>
+                      <ul key={j} className="w-[420px] gap-2 p-4">
+                        <li className="grid grid-cols-[repeat(2,minmax(0,auto))] items-center justify-start gap-4">
+                          {subItem.resource?.image && (
+                            <Image
+                              className="w-32 rounded-sm"
+                              src={subItem.resource?.image?.url}
+                              alt={subItem.resource?.title}
+                              width={200}
+                              height={200}
+                            />
+                          )}
                           <Link href={subItem.path} legacyBehavior passHref prefetch={true}>
-                            <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "w-full")}>
-                              {subItem.title}
+                            <NavigationMenuLink className={(cn(navigationMenuTriggerStyle()), "flex flex-col gap-1")}>
+                              <span className="font-semibold">{subItem.title}</span>
+                              <span className="text-zinc-500">{subItem.resource?.description}</span>
                             </NavigationMenuLink>
                           </Link>
                         </li>
