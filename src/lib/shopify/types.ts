@@ -98,11 +98,13 @@ export type ShopifyProductsOperation = {
 };
 
 export type ShopifyCollection = {
+  id: string;
   handle: string;
   title: string;
   description: string;
   seo: SEO;
   updatedAt: string;
+  image?: Image;
 };
 
 export type Collection = ShopifyCollection & {
