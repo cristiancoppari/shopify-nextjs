@@ -19,8 +19,6 @@ export default async function Home() {
     first: 4,
   });
 
-  console.log({ products });
-
   return (
     <main>
       <Hero {...HERO} />
