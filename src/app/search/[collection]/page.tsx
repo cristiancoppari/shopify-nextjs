@@ -17,7 +17,7 @@ export default async function CategoryPage({
 
   return (
     <section>
-      {products.length ? <ProductGrid items={products} /> : <p>No products found in this collection</p>}
+      {products.length ? <ProductGrid items={products} /> : <p>No se encontraron products en esta colección.</p>}
     </section>
   );
 }

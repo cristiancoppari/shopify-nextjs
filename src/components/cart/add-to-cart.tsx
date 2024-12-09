@@ -26,13 +26,13 @@ function SubmitButton({
   if (!selectedVariantId)
     return (
       <Button type="submit">
-        Add to cart <ShoppingCart className="ml-2" />
+        Agregar <ShoppingCart className="ml-2" />
       </Button>
     );
 
   return (
     <Button type="submit">
-      Add to cart <ShoppingCart className="ml-2" />
+      Agregar <ShoppingCart className="ml-2" />
     </Button>
   );
 }
@@ -55,7 +55,7 @@ export default function AddToCart({ product }: { product: Product }) {
   if (!finalVariant) {
     return (
       <Button type="submit" disabled>
-        Unavailable
+        Selecciona una opción
       </Button>
     );
   }

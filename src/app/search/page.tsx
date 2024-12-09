@@ -12,17 +12,17 @@ export default async function SearchPage({
   const { sort, q: searchValue } = (await searchParams) as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
   const products = await getProducts({ sortKey, reverse, query: searchValue });
-  const resultsText = products.length > 1 ? "results" : "result";
+  const resultsText = products.length > 1 ? "resultados" : "resultado";
 
   return (
     <>
       {searchValue ? (
         <p className="mb-4">
-          {products.length === 0 ? "No products found" : `Showing ${products.length} ${resultsText} for`}
+          {products.length === 0 ? "No se encontraron productos" : `Mostrando ${products.length} ${resultsText} para`}
         </p>
       ) : null}
 
-      {products.length > 0 ? <ProductGrid items={products} /> : <p className="mb-4">No products found</p>}
+      {products.length > 0 ? <ProductGrid items={products} /> : <p className="mb-4">No se encontraron productos</p>}
     </>
   );
 }

@@ -42,7 +42,7 @@ export default function VariantSelector({
     return (
       <form key={option.id}>
         <dl className="mb-8">
-          <dt className="mb-4 text-sm uppercase tracking-wide">{option.name}</dt>
+          <dt className="mb-2 text-sm uppercase tracking-wide">{option.name}</dt>
           <dd className="flex flex-wrap gap-3">
             {option.values.map((value) => {
               const optionNameLowerCase = option.name.toLowerCase();
@@ -71,11 +71,10 @@ export default function VariantSelector({
                   key={value}
                   aria-disabled={!isAvailableForSale}
                   disabled={!isAvailableForSale}
-                  title={`${option.name} ${value}${!isAvailableForSale ? " (Out of Stock)" : ""}`}
-                  className={cn("flex min-w-[48px] items-center justify-center rounded-full border px-2 py-1 text-sm", {
-                    "cursor-default ring-2 ring-blue-600": isActive,
-                    "ring-1 ring-transparent transition duration-300 ease-in-out hover:ring-blue-600":
-                      !isActive && isAvailableForSale,
+                  title={`${option.name} ${value}${!isAvailableForSale ? " (Fuera de stock)" : ""}`}
+                  className={cn("flex min-w-[48px] items-center justify-center rounded-full border px-4 py-1 text-sm", {
+                    "cursor-default bg-blue-600 ring-2 ring-blue-600 ring-offset-1": isActive,
+                    "ring-1 ring-transparent transition duration-300 ease-in-out": !isActive && isAvailableForSale,
                     "relative z-10 cursor-not-allowed overflow-hidden bg-neutral-100 text-neutral-500 ring-1 ring-neutral-300 before:absolute before:inset-x-0 before:-z-10 before:h-px before:-rotate-45 before:bg-neutral-300 before:transition-transform dark:bg-neutral-900 dark:text-neutral-400 dark:ring-neutral-700 before:dark:bg-neutral-700":
                       !isAvailableForSale,
                   })}

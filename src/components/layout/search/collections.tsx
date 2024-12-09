@@ -7,7 +7,7 @@ import { cn } from "~/lib/utils";
 async function CollectionList() {
   const collections = await getCollections();
 
-  return <FilterList list={collections} title="Collections" />;
+  return <FilterList list={collections} title="Colecciones" />;
 }
 
 export default function Collections() {

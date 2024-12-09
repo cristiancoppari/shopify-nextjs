@@ -8,3 +8,32 @@
   flex: 0 0 100%;
   min-width: 0;
 }
+
+[data-carousel="products"] {
+  margin: auto;
+  --slide-spacing: 2rem;
+  --slide-size: 100%;
+
+  @screen md {
+    --slide-size: 50%;
+  }
+
+  @screen lg {
+    --slide-size: 25%;
+  }
+
+  .embla__viewport {
+    overflow: hidden;
+  }
+  .embla__container {
+    display: flex;
+    touch-action: pan-y pinch-zoom;
+    margin-left: calc(var(--slide-spacing) * -1);
+  }
+  .embla__slide {
+    transform: translate3d(0, 0, 0);
+    flex: 0 0 var(--slide-size);
+    min-width: 0;
+    padding-left: var(--slide-spacing);
+  }
+}
