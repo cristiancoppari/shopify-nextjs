@@ -106,6 +106,10 @@ function createOrUpdateCartItem(
         handle: product.handle,
         title: product.title,
         featuredImage: product.featuredImage,
+        priceRange: {
+          minVariantPrice: product.priceRange.minVariantPrice,
+          maxVariantPrice: product.priceRange.maxVariantPrice,
+        },
       },
     },
   };

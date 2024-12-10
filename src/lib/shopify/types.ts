@@ -144,6 +144,10 @@ export type CartProduct = {
   handle: string;
   title: string;
   featuredImage: Image;
+  priceRange: {
+    maxVariantPrice: Money;
+    minVariantPrice: Money;
+  };
 };
 
 export type CartItem = {

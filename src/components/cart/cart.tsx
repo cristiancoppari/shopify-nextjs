@@ -86,8 +86,8 @@ export function Cart() {
                         <div className="absolute right-2 top-2 z-10 flex flex-row justify-between">
                           <DeleteItemButton item={item} optimisticUpdate={updateCartItem} />
                         </div>
-                        <div className="grid grid-cols-[1fr_4fr] gap-4">
-                          <div className="relative w-full overflow-hidden rounded-md border border-neutral-300">
+                        <div className="grid gap-4 md:grid-cols-[1fr_4fr]">
+                          <div className="relative hidden w-full overflow-hidden rounded-md border border-neutral-300 md:block">
                             <Image
                               className="h-full w-full object-cover"
                               width={64}
@@ -126,11 +126,22 @@ export function Cart() {
                                   optimisticUpdate={updateCartItem}
                                 />
                               </div>
-                              <Price
-                                className="flex justify-end space-y-2 text-right text-sm"
-                                amount={item.cost.totalAmount.amount}
-                                currencyCode={item.cost.totalAmount.currencyCode}
-                              />
+                              <div className="hidden md:flex md:flex-col md:items-end">
+                                <span className="text-sm text-zinc-500">$/unidad</span>
+                                <Price
+                                  className="flex justify-end space-y-2 text-right text-sm"
+                                  amount={item.merchandise.product.priceRange.maxVariantPrice.amount}
+                                  currencyCode={item.merchandise.product.priceRange.maxVariantPrice.currencyCode}
+                                />
+                              </div>
+                              <div className="flex flex-col items-end">
+                                <span className="text-sm font-semibold text-zinc-500">Total</span>
+                                <Price
+                                  className="flex justify-end space-y-2 text-right text-sm font-semibold"
+                                  amount={item.cost.totalAmount.amount}
+                                  currencyCode={item.cost.totalAmount.currencyCode}
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -148,9 +159,9 @@ export function Cart() {
                   currencyCode={cart.cost.totalTaxAmount.currencyCode}
                 />
               </div>
-              <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
+              <div className="mb-3 flex items-center justify-between gap-x-2 border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
                 <p>Envío</p>
-                <p className="text-right">Calculados al momento de la compra</p>
+                <p className="truncate text-right">Calculados al momento de la compra</p>
               </div>
               <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
                 <p>Total</p>
