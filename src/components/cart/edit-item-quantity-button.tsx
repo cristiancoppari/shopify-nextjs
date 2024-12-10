@@ -1,29 +1,21 @@
 import { MinusIcon, PlusIcon } from "lucide-react";
-import clsx from "clsx";
 import { useActionState } from "react";
 
+import { Button, type ButtonProps } from "~/components/ui/button";
 import { CartItem } from "~/lib/shopify/types";
 
 import { updateItemQuantity } from "./actions";
 
-function SubmitButton({ type }: { type: "plus" | "minus" }) {
+function SubmitButton({ type, variant = "default" }: { type: "plus" | "minus"; variant?: ButtonProps["variant"] }) {
   return (
-    <button
+    <Button
       type="submit"
       aria-label={type === "plus" ? "Increase item quantity" : "Reduce item quantity"}
-      className={clsx(
-        "ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full p-2 transition-all duration-200 hover:border-neutral-800 hover:opacity-80",
-        {
-          "ml-auto": type === "minus",
-        },
-      )}
+      variant={variant}
+      size="sm"
     >
-      {type === "plus" ? (
-        <PlusIcon className="h-4 w-4 dark:text-neutral-500" />
-      ) : (
-        <MinusIcon className="h-4 w-4 dark:text-neutral-500" />
-      )}
-    </button>
+      {type === "plus" ? <PlusIcon className="h-4 w-4" /> : <MinusIcon className="h-4 w-4" />}
+    </Button>
   );
 }
 
@@ -31,11 +23,13 @@ export function EditItemQuantityButton({
   item,
   type,
   optimisticUpdate,
+  variant,
 }: {
   item: CartItem;
   type: "plus" | "minus";
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   optimisticUpdate: any;
+  variant?: ButtonProps["variant"];
 }) {
   const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
@@ -50,7 +44,7 @@ export function EditItemQuantityButton({
         await actionWithVariant();
       }}
     >
-      <SubmitButton type={type} />
+      <SubmitButton type={type} variant={variant} />
       <p aria-label="polite" className="sr-only" role="status">
         {message}
       </p>

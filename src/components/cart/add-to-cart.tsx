@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { ShoppingCart } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 
 import type { Product } from "~/lib/shopify/types";
 import { useProduct } from "~/context/product.context";
@@ -26,13 +26,13 @@ function SubmitButton({
   if (!selectedVariantId)
     return (
       <Button type="submit">
-        Agregar <ShoppingCart className="ml-2" />
+        Agregar <PlusIcon />
       </Button>
     );
 
   return (
     <Button type="submit">
-      Agregar <ShoppingCart className="ml-2" />
+      Agregar <PlusIcon />
     </Button>
   );
 }

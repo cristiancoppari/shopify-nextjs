@@ -1,5 +1,5 @@
 import { Navbar } from "~/components/layout/navbar/navbar";
-import CartModal from "~/components/cart/modal";
+import { Cart } from "~/components/cart/cart";
 import Search from "~/components/layout/navbar/search";
 
 export function Header() {
@@ -12,7 +12,7 @@ export function Header() {
           <Search />
         </div>
         <div>
-          <CartModal />
+          <Cart />
         </div>
       </div>
     </header>
