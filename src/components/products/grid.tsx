@@ -5,6 +5,7 @@ import { cn } from "~/lib/utils";
 
 type Cols = 2 | 3 | 4;
 export function Grid({ items, cols = 4 }: { cols?: Cols; items: Product[] | Collection[] }) {
+  console.log({ items });
   return (
     <div
       className={cn(

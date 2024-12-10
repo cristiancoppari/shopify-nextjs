@@ -13,17 +13,17 @@ export type SortFilterItem = {
   reverse: boolean;
 };
 export const defaultSort: SortFilterItem = {
-  title: "Sort by: Relevance",
+  title: "Ordenar por: Relevancia",
   slug: "relevance-asc",
   sortKey: "RELEVANCE",
   reverse: false,
 };
 export const sorting: SortFilterItem[] = [
   defaultSort,
-  { title: "Trending", slug: "trending-asc", sortKey: "BEST_SELLING", reverse: false },
-  { title: "Latest arrivals", slug: "latest-desc", sortKey: "CREATED_AT", reverse: true },
-  { title: "Price: Low to high", slug: "price-asc", sortKey: "PRICE", reverse: false },
-  { title: "Price: High to low", slug: "price-desc", sortKey: "PRICE", reverse: true },
+  { title: "Populares", slug: "trending-asc", sortKey: "BEST_SELLING", reverse: false },
+  { title: "Nuevos arrivos", slug: "latest-desc", sortKey: "CREATED_AT", reverse: true },
+  { title: "Precio: ascendente", slug: "price-asc", sortKey: "PRICE", reverse: false },
+  { title: "Precio: descendente", slug: "price-desc", sortKey: "PRICE", reverse: true },
 ];
 
 export const HIDDEN_PRODUCT_TAG = "nextjs-frontend-hidden";

@@ -51,6 +51,16 @@ export const productFragment = /* GraphQl */ `
         }
       }
     }
+    compareAtPriceRange {
+      maxVariantPrice {
+        amount
+        currencyCode
+      }
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
     seo {
       ...seo
     }

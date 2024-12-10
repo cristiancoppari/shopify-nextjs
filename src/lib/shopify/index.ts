@@ -295,11 +295,11 @@ export async function getCollections(): Promise<Collection[]> {
     {
       id: "all",
       handle: "",
-      title: "All",
-      description: "All products",
+      title: "Todos",
+      description: "Todos los productos",
       seo: {
-        title: "All products",
-        description: "All products",
+        title: "Todos los productos",
+        description: "Todos los productos",
       },
       updatedAt: new Date().toISOString(),
       path: "/search",

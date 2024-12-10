@@ -48,6 +48,10 @@ export type ProductVariant = {
     name: string;
     value: string;
   }[];
+  compareAtPriceRange: {
+    maxVariantPrice: Money;
+    minVariantPrice: Money;
+  };
   price: Money;
 };
 
@@ -71,6 +75,10 @@ export type ShopifyProduct = {
   descriptionHtml: string;
   options: ProductOption[];
   priceRange: {
+    maxVariantPrice: Money;
+    minVariantPrice: Money;
+  };
+  compareAtPriceRange: {
     maxVariantPrice: Money;
     minVariantPrice: Money;
   };

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
-import { TrashIcon } from "lucide-react";
 
 import { useCart } from "~/context/cart.context";
 import { createUrl } from "~/lib/utils";
